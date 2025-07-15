@@ -4,8 +4,8 @@ Car = Pilot.AutoCar()
 kb = Getchar()
 
 LEFT = -1
-CENTER = 0
 RIGHT = 1
+CENTER = 0
 
 spd_val = 70
 
