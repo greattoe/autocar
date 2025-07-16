@@ -42,29 +42,30 @@ pip3 install paho-mqtt
 ## 3️⃣ Jetson Nano: Subscriber 코드 예시
 
 ```
-pythonCopyEdit# jetson_subscriber.py
 import paho.mqtt.client as mqtt
 
 def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
+    print("Connected with result code %d" % rc)
     client.subscribe("jetson/control")
 
 def on_message(client, userdata, msg):
-    print(f"Received message: {msg.payload.decode()}")
-    if msg.payload.decode() == "led_on":
+    payload = msg.payload.decode().strip()
+    print("Received message: %s" % payload)
+
+    if payload == "led_on":
         print("LED ON command received")
-        # GPIO 제어나 실행 코드 삽입
-    elif msg.payload.decode() == "led_off":
+    elif payload == "led_off":
         print("LED OFF command received")
-        # GPIO 제어 OFF
+    else:
+        print("Unknown command: %s" % payload)
 
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.0.100", 1883, 60)  # Mosquitto 브로커 IP
-
+client.connect("10.42.0.1", 1883, 60)  # PC의 IP 주소로 연결
 client.loop_forever()
+
 ```
 
 ------
@@ -107,3 +108,103 @@ publish.single("jetson/control", "led_on", hostname="192.168.0.100")
 
 
 ------
+
+
+
+
+
+### ✅ 네트워크 구성 확인
+
+| 장치            | 역할               | IP 주소       |
+| --------------- | ------------------ | ------------- |
+| **PC**          | Mosquitto 브로커 🟢 | `10.42.0.1`   |
+| **Jetson Nano** | MQTT Subscriber 🔵  | `10.42.0.198` |
+
+
+
+------
+
+### ✅ 올바른 설정 요약
+
+#### 🟢 PC (Publisher 또는 브로커 실행)
+
+**Mosquitto 브로커 실행 확인:**
+
+```
+bash
+
+
+CopyEdit
+sudo systemctl status mosquitto
+```
+
+**브로커 테스트용 메시지 전송 (Publisher):**
+
+```
+bash
+
+
+CopyEdit
+mosquitto_pub -h 10.42.0.1 -t jetson/control -m "led_off"
+```
+
+------
+
+#### 🔵 Jetson Nano (Subscriber 코드)
+
+**Python 코드 예시:**
+
+```
+pythonCopyEditimport paho.mqtt.client as mqtt
+
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code %d" % rc)
+    client.subscribe("jetson/control")
+
+def on_message(client, userdata, msg):
+    payload = msg.payload.decode().strip()
+    print("Received message: %s" % payload)
+
+    if payload == "led_on":
+        print("LED ON command received")
+    elif payload == "led_off":
+        print("LED OFF command received")
+    else:
+        print("Unknown command: %s" % payload)
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+
+client.connect("10.42.0.1", 1883, 60)  # PC의 IP 주소로 연결
+client.loop_forever()
+```
+
+> 꼭 `strip()`을 사용하여 개행 문자 등으로 인한 비교 실패를 방지하세요.
+
+------
+
+### ✅ Jetson Nano 수동 수신 테스트
+
+```
+bash
+
+
+CopyEdit
+mosquitto_sub -h 10.42.0.1 -t jetson/control
+```
+
+→ 이 명령어로 `led_off` 메시지가 보이면, Python 코드 문제이고,
+ → 메시지가 보이지 않으면 네트워크나 브로커 연결 문제입니다.
+
+------
+
+### 🔒 방화벽(UFW) 설정 확인 (PC 측에서만 필요)
+
+```
+bash
+
+
+CopyEdit
+sudo ufw allow 1883
+```
