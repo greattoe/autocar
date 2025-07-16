@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Jetson Nano CSI 카메라용 GStreamer 파이프라인
 gst_str = ("nvarguscamerasrc ! "
-           "video/x-raw(memory:NVMM), width=1280, height=720, format=NV12, framerate=30/1 ! "
+           "video/x-raw(memory:NVMM), width=320, height=240, format=NV12, framerate=30/1 ! "
            "nvvidconv flip-method=0 ! "
            "video/x-raw, format=BGRx ! "
            "videoconvert ! "
