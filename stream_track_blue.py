@@ -3,6 +3,9 @@ import numpy as np
 import requests
 import paho.mqtt.publish as publish
 
+margin_x = 50
+
+
 # MQTT 설정
 # broker_ip = "10.42.0.1"  # 핫스팟 연결 시
 broker_ip = "192.168.55.100"  # USB 연결 시
@@ -64,10 +67,12 @@ try:
                 center_y = y + h // 2
                 print("center: ( %s, %s )" % (center_x, center_y))
 
-                if center_x < 160:
+                if center_x < 160 - margin_x:
                     pub_msg("left");    print("left")
-                elif center_x > 180:
+                elif center_x > 160 + margin_x:
                     pub_msg("right");   print("right")
+                else:
+                    pass
 
             cv2.imshow("Videosrc", src)
             if cv2.waitKey(5) & 0xFF == 27:
