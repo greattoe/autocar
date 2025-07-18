@@ -33,7 +33,8 @@ try:
             if frame is None:
                 continue
 
-            src = cv2.resize(frame, (320, 240))
+            # src = frame.copycv2.resize(frame, (320, 240))
+            src = src = frame.copy()
             hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
 
             lower_blue = np.array([100, 100, 120])
@@ -41,7 +42,7 @@ try:
             mask = cv2.inRange(hsv, lower_blue, upper_blue)
             res = cv2.bitwise_and(src, src, mask=mask)
 
-            gray = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)  # ✅ 수정
+            gray = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
             _, bin = cv2.threshold(gray, 30, 255, cv2.THRESH_BINARY)
             contours, _ = cv2.findContours(bin, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 

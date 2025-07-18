@@ -3,7 +3,7 @@ import numpy as np
 import requests
 import paho.mqtt.publish as publish
 
-margin_x = 50; 
+margin_x = 96; margin_y = 72
 
 
 # MQTT 설정
@@ -18,7 +18,7 @@ def pub_msg(msg):
 url = 'http://10.42.0.198:8080/video_feed'
 stream = requests.get(url, stream=True)
 if stream.status_code != 200:
-    print(f"❌ Failed to connect to {url}")
+    print(f"Failed to connect to {url}")
     exit()
 
 bytes_buffer = b''
@@ -26,8 +26,8 @@ bytes_buffer = b''
 try:
     for chunk in stream.iter_content(chunk_size=1024):
         bytes_buffer += chunk
-        a = bytes_buffer.find(b'\xff\xd8')  # JPEG 시작
-        b = bytes_buffer.find(b'\xff\xd9')  # JPEG 끝
+        a = bytes_buffer.find(b'\xff\xd8')  # JPEG begin
+        b = bytes_buffer.find(b'\xff\xd9')  # JPEG end
 
         if a != -1 and b != -1:
             jpg = bytes_buffer[a:b + 2]
@@ -73,10 +73,10 @@ try:
                 elif center_x > 320 + margin_x:
                     pub_msg("right");   print("right")
 
-                if center_x < 320 - margin_x:
-                    pub_msg("left");    print("left")
-                elif center_x > 320 + margin_x:
-                    pub_msg("right");   print("right")
+                if center_y < 240 - margin_y:
+                    pub_msg("up");    print("up")
+                elif center_y > 240 + margin_y:
+                    pub_msg("down");   print("down")
                 else:
                     pass
 
@@ -85,7 +85,7 @@ try:
                 break
 
 except KeyboardInterrupt:
-    print("\n🛑 Stopped by user (KeyboardInterrupt)")
+    print("\nStopped by user (KeyboardInterrupt)")
 
 finally:
     cv2.destroyAllWindows()
