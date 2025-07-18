@@ -3,8 +3,8 @@ import numpy as np
 import requests
 import paho.mqtt.publish as publish
 
-margin_x = 96
-margin_y = 72
+margin_x = 50
+margin_y = 30
 
 
 # MQTT 설정
@@ -20,7 +20,7 @@ url = 'http://192.168.55.1:8080/video_feed'
 #url = 'http://172.20.10.2:8080/video_feed'
 stream = requests.get(url, stream=True)
 if stream.status_code != 200:
-    print(f"Failed to connect to {url}")
+    print(f"❌ Failed to connect to {url}")
     exit()
 
 bytes_buffer = b''
@@ -40,8 +40,7 @@ try:
             if frame is None:
                 continue
 
-            src = cv2.resize(frame, (640, 480))
-            #src = frame.copy()
+            src = cv2.resize(frame, (320, 240))
             hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
 
             # 파란색 범위 설정
@@ -70,15 +69,15 @@ try:
                 center_y = y + h // 2
                 print("center: ( %s, %s )" % (center_x, center_y))
 
-                if center_x < 320 - margin_x:
+                if center_x < 160 - margin_x:
                     pub_msg("left");    print("left")
-                elif center_x > 320 + margin_x:
+                elif center_x > 160 + margin_x:
                     pub_msg("right");   print("right")
                 else:
                     pass
-                if center_y < 240 - margin_y:
+                if center_y < 120 - margin_y:
                     pub_msg("up");    print("up")
-                elif center_y > 240 + margin_y:
+                elif center_y > 120 + margin_y:
                     pub_msg("down");   print("down")
                 else:
                     pass
@@ -88,7 +87,7 @@ try:
                 break
 
 except KeyboardInterrupt:
-    print("\nStopped by user (KeyboardInterrupt)")
+    print("\n🛑 Stopped by user (KeyboardInterrupt)")
 
 finally:
     cv2.destroyAllWindows()
