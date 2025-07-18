@@ -32,7 +32,7 @@ def main():
         client.on_message = on_message
         client.connect("10.42.0.1", 1883, 60)
         client.loop_start()  # 백그라운드 수신 루프
-
+        print("subscribe \`/car/control\` topic & control autocar!")
         while True:
             if MESSAGE == "forward":
                 print("go")

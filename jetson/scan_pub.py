@@ -17,7 +17,7 @@ back = 0
 right = 0
 
 # MQTT 설정
-broker_ip = "192.168.55.100"  # 올바른 IP인지 확인
+broker_ip = "10.42.0.1"  # 올바른 IP인지 확인
 client = mqtt.Client(protocol=mqtt.MQTTv311)  #MQTT 클라이언트 생성
 
 def pub_lidar():
@@ -37,6 +37,7 @@ def main():
     client.connect(broker_ip)
 
     try:
+        print("start piblish lidar topic!")
         while True:
             vectors = lidar.getVectors()
             front = left = back = right = 0
