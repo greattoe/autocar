@@ -36,10 +36,10 @@ def main():
         while True:
             if MESSAGE == "forward":
                 print("go")
-                Car.backward(); MESSAGE = ""
+                Car.forward();  MESSAGE = ""
             elif MESSAGE == "backward":
                 print("back")
-                Car.forward();  MESSAGE = ""
+                Car.backward(); MESSAGE = ""
             elif MESSAGE == "stop":
                 print("stop")
                 Car.stop(); MESSAGE = ""
