@@ -9,6 +9,23 @@ if degree <= 60 or degree >= 300:
 import sys
 from pop import LiDAR, Pilot
 
+import paho.mqtt.client as mqtt
+client = mqtt.Client()
+
+broker_ip = "192.168.55.100" #for usb rndis
+# broker_ip = "110.42.0.198" #for usb rndis
+
+def pub_lidar():
+    client.connect(broker_ip)
+
+    client.publish("lidar/front", front)
+    client.publish("lidar/right", right)
+    client.publish("lidar/back",  back)
+    client.publish("lidar/left",  left)
+
+    client.disconnect()
+
+
 # declare global varable
 front = 0
 left = 0
@@ -42,6 +59,7 @@ def main():
                     back = distance #print("distance back = %s" %distance)
                 if (degree >= 85 and degree <= 95):  # right
                     right = distance #print("distance right = %s" %distance)
+                pub_lidar()
 
     except KeyboardInterrupt:
         print("\nProgram Terminated!")

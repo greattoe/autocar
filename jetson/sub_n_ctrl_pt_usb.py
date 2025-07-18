@@ -44,16 +44,16 @@ def main():
         while True:
             if MESSAGE == "up":
                 print("up"); MESSAGE = ""
-                if tilt + 5 <= 200:
+                if tilt + 5 <= 90:
                     tilt = tilt + 5
                 else:
-                    tilt = 200
+                    tilt = 90
             elif MESSAGE == "down":
                 print("down"); MESSAGE = ""
-                if tilt - 5 >= -30:
+                if tilt - 5 >= -15:
                     tilt = tilt - 5
                 else:
-                    tilt = -30
+                    tilt = -15
             if MESSAGE == "left":
                 print("left"); MESSAGE = ""
                 if pan - 5 >= 0:
