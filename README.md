@@ -22,14 +22,15 @@ sudo nano /etc/rc.local
 
 ```
 #!/bin/bash
- 2 sleep 10
- 5 /usr/sbin/nvpmodel -m 0
- 6
- 8 /usr/bin/jetson_clocks
- 9
-11 /bin/echo 255 > /sys/devices/pwm-fan/target_pwm
-12
-13 exit 0
+sleep 10
+
+/usr/sbin/nvpmodel -m 0
+
+/usr/bin/jetson_clocks
+
+/bin/echo 255 > /sys/devices/pwm-fan/target_pwm
+
+exit 0
 
 ```
 
