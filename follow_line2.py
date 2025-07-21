@@ -95,6 +95,17 @@ try:
 
                     cv2.putText(frame, "Slope: %.1f deg" % deviation, (30, 50),
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                
+                if deviation < -15:
+                    pub_msg("left2")
+                elif deviation < -5:
+                    pub_msg("left1")
+                elif deviation > 15:
+                    pub_msg("right2")
+                elif deviation > 5:
+                    pub_msg("right1")
+                else:
+                    pub_msg("straight")
 
             # ROI 박스 표시 (하늘색)
             cv2.rectangle(frame, (roi_x1, roi_y1), (roi_x2, roi_y2), (255, 255, 0), 2)
