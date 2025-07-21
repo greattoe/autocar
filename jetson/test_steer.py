@@ -17,6 +17,10 @@ while True:
         Car.steering = RIGHT
     elif key == 's':
         Car.steering = CENTER
+    if key == 'w':
+        Car.steering = -2
+    elif key == 'e':
+        Car.steering = 2
     else:
         pass
 

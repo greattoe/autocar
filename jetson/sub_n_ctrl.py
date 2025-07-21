@@ -3,10 +3,6 @@ from pop import Pilot
 import paho.mqtt.client as mqtt
 
 Car = Pilot.AutoCar()
-
-LEFT     = -1
-RIGHT    = 1
-CENTER   = 0
 SPD_VAL  = 70
 SPD_STP  = 5
 MAX_SPD  = 99
@@ -32,7 +28,7 @@ def main():
         client.on_message = on_message
         client.connect("10.42.0.1", 1883, 60)
         client.loop_start()  # 백그라운드 수신 루프
-        print("subscribe \`/car/control\` topic & control autocar!")
+        print("subscribe  topic & control Autocar Prime!")
         while True:
             if MESSAGE == "forward":
                 print("go")
@@ -43,6 +39,21 @@ def main():
             elif MESSAGE == "stop":
                 print("stop")
                 Car.stop(); MESSAGE = ""
+            elif MESSAGE == "straight":
+                print("straight")
+                Car.steering = 0; MESSAGE = ""
+            elif MESSAGE == "left1":
+                print("left1")
+                Car.steering = -0.5; MESSAGE = ""
+            elif MESSAGE == "left2":
+                print("left2")
+                Car.steering = -1.0; MESSAGE = ""
+            elif MESSAGE == "right1":
+                print("right1")
+                Car.steering = 0.5; MESSAGE = ""
+            elif MESSAGE == "right2":
+                print("right2")
+                Car.steering = 1.0; MESSAGE = ""
             else:
                 pass
 
