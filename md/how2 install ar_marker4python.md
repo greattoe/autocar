@@ -32,7 +32,61 @@ cd ~/ar_markers
 
 
 
-#### 5. `setup.py`를 이용한 설치
+
+
+#### 5. `setup.py`편집
+
+
+
+
+
+```
+gedit setup.py
+```
+
+`setup.py`를 다음과 같이 편집한다. 
+
+```bash
+from setuptools import setup
+import os
+
+def get_pkg_version(path):
+    with open(path, 'r') as f:
+        for line in f:
+            if line.startswith('__version__'):
+                delim = '"' if '"' in line else "'"
+                return line.split(delim)[1]
+
+VERSION = get_pkg_version('ar_markers/__init__.py')
+PACKAGE_NAME = 'ar_markers'
+
+README = open('readme.rst').read() if os.path.exists('readme.rst') else ''
+
+setup(
+    name=PACKAGE_NAME,
+    version=VERSION,
+    author="Kevin Walchko",
+    author_email="walchko@github.users.noreply.com",
+    description="A python robotic framework and tools",
+    license="BSD",
+    keywords=['framework', 'robotic', 'marker', 'vision', 'ar marker', 'ar'],
+    packages=['ar_markers'],
+    install_requires=['numpy', 'opencv-python'],
+    long_description=README,
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'License :: OSI Approved :: BSD License',
+        'Programming Language :: Python :: 3',
+    ],
+)
+
+```
+
+
+
+
+
+#### 6. `setup.py`를 이용한 설치
 
 ```
 pip3 install . --user
@@ -89,3 +143,4 @@ gnd0@a10sc:~/ar_markers$ ls -al
 
 
 
+**[목록 열기](../README.md)** 

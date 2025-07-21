@@ -5,10 +5,12 @@
 >1. **[CLI환경에서의 WiFi연결](./md/how2connect_wifi_cli_env.md)**
 >2. [PC 인터넷 연결 공유를 통한**Jetson 인터넷 연결**](./md/how2connect_jetson2internet.md) 
 >3. **[MQTT Mosquitto](./md/mqtt_mosquitto.md)** 
+>4. 
+>5. **[파이썬에서 사용 가능한 AR마커 라이브러리 설치](./md/how2 install ar_marker4python.md)** 
 
 
 
-
+ 
 
 
 
