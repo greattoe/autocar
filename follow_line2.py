@@ -1,7 +1,16 @@
-import cv2
+import cv2, sys, os, time
 import numpy as np
 import math
 import requests
+
+import paho.mqtt.publish as publish
+broker_ip = "10.42.0.1"
+topic = "car/control"
+msg =''
+cmd = 'mosquitto_pub -h 10.42.0.1 -t car/control -m "stop"'
+
+def pub_msg(msg):
+    publish.single(topic, msg, hostname=broker_ip)
 
 # MJPEG 스트림 URL
 url = 'http://192.168.55.1:8080/video_feed'
@@ -29,6 +38,8 @@ def extract_roi(frame):
     return roi, roi_x1, roi_y1, roi_x2, roi_y2
 
 try:
+    pub_msg("straight")
+    pub_msg("forward")
     for chunk in stream.iter_content(chunk_size=1024):
         bytes_buffer += chunk
         a = bytes_buffer.find(b'\xff\xd8')
@@ -95,8 +106,10 @@ try:
                 break
 
 except KeyboardInterrupt:
+    os.system(cmd)
     print("\nStopped by user.")
 
 finally:
+    os.system(cmd)
     cv2.destroyAllWindows()
 
