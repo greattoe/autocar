@@ -4,16 +4,9 @@ import requests
 
 url = 'http://10.42.0.198:8080/video_feed'
 
-cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-face_cascade = cv2.CascadeClassifier(cascade_path)
-
-if face_cascade.empty():
-    print(f"❌ Error: Cannot load Haar cascade from {cascade_path}")
-    exit()
-
 stream = requests.get(url, stream=True)
 if stream.status_code != 200:
-    print(f"❌ Failed to connect to {url}")
+    print("Failed to connect to %s" % url)
     exit()
 
 bytes_buffer = b''
@@ -21,8 +14,8 @@ bytes_buffer = b''
 try:
     for chunk in stream.iter_content(chunk_size=1024):
         bytes_buffer += chunk
-        a = bytes_buffer.find(b'\xff\xd8')  # JPEG 시작
-        b = bytes_buffer.find(b'\xff\xd9')  # JPEG 끝
+        a = bytes_buffer.find(b'\xff\xd8')  # JPEG start
+        b = bytes_buffer.find(b'\xff\xd9')  # JPEG end
 
         if a != -1 and b != -1:
             jpg = bytes_buffer[a:b + 2]
@@ -33,8 +26,7 @@ try:
             if frame is None:
                 continue
 
-            # src = frame.copycv2.resize(frame, (320, 240))
-            src = src = frame.copy()
+            src = frame.copy()
             hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
 
             lower_blue = np.array([100, 100, 120])
@@ -61,7 +53,7 @@ try:
                 cv2.rectangle(src, (x, y), (x + width, y + height), COLOR, 2)
                 center_x = x + width // 2
                 center_y = y + height // 2
-                print("center: ( %s, %s )" % (center_x, center_y))
+                print("center: ( %d, %d )" % (center_x, center_y))
 
             cv2.imshow("Videosrc", src)
 
@@ -70,7 +62,7 @@ try:
                 break
 
 except KeyboardInterrupt:
-    print("\nStopped by user (KeyboardInterrupt)")
+    print("Stopped by user (KeyboardInterrupt)")
 
 finally:
     cap = None

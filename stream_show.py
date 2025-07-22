@@ -3,7 +3,7 @@ import numpy as np
 import requests
 
 # MJPEG 스트림 URL
-url = 'http://10.42.0.198:8080/video_feed'
+url = 'http://10.42.0.170:8080/video_feed'
 
 # 스트리밍 요청 시작
 stream = requests.get(url, stream=True)
