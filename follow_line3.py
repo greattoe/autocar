@@ -66,7 +66,7 @@ def extract_roi(frame):
     return roi, roi_x1, roi_y1, roi_x2, roi_y2
 
 # MJPEG 스트림 URL
-url = 'http://192.168.55.1:8080/video_feed'
+url = 'http://10.42.0.66:8080/video_feed'
 stream = requests.get(url, stream=True)
 if stream.status_code != 200:
     print("Failed to connect to %s\n" % url)
