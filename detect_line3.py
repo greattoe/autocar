@@ -68,7 +68,7 @@ def predict_frame(model, frame, device):
 # 메인 루프
 # -------------------------
 def main():
-    model_path = "unet_line.pth"
+    model_path = "unet_line.pth"# <<------------------
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     model = UNet().to(device)
